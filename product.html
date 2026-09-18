@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><title>Details</title>
+<style>body{font-family:Arial;padding:20px}.card{border:1px solid #ccc;padding:20px;width:300px;border-radius:10px;background:white}button{background:black;color:white;padding:8px 12px;border:none;border-radius:5px}</style>
+</head><body>
+<div id="detail">Loading...</div><br><a href="index.html">← Back</a>
+<script>
+async function load(){
+ let id=new URLSearchParams(location.search).get('id');
+ let r=await fetch('/api/products/'+id);let p=await r.json();
+ document.getElementById('detail').innerHTML=`<div class="card"><img src="${p.image}" width="100%"><h2>${p.name}</h2><p>${p.desc}</p><h3>Rs.${p.price}</h3><button onclick="add()">Add to Cart</button></div>`;
+ window.add=()=>{let c=JSON.parse(localStorage.getItem('cart')||'[]');c.push(p.id);localStorage.setItem('cart',JSON.stringify(c));alert("Cart lo add ayindi!");}
+}
+load();
+</script></body></html>

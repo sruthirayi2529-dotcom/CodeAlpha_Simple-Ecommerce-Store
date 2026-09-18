@@ -1,0 +1,15 @@
+<!DOCTYPE html><html><head><title>Cart</title>
+<style>body{font-family:Arial;padding:20px}button{background:black;color:white;padding:10px 15px;border:none;border-radius:5px}</style>
+</head><body>
+<h1>Your Cart 🛒</h1><div id="items"></div><br>
+<button onclick="order()">Place Order</button> <a href="index.html">Continue Shopping</a>
+<script>
+async function show(){
+ let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+ let res=await fetch('/api/products');let pro=await res.json();
+ let items=cart.map(id=>pro.find(p=>p.id==id));
+ document.getElementById('items').innerHTML=items.map(i=>`<p>${i.name} - Rs.${i.price}</p>`).join('')||"Cart Empty";
+}
+async function order(){await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cart:JSON.parse(localStorage.getItem('cart')||'[]')})});alert("Order Placed! ✅");localStorage.clear();show();}
+show();
+</script></body></html>
